@@ -9,6 +9,10 @@ jobs:
   test-and-build:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      DB_PASSWORD: forge-ci-db-password
+      MYSQL_ROOT_PASSWORD: forge-ci-root-password
+      JWT_SECRET: forge-ci-only-secret-0123456789-abcdef
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -18,10 +22,6 @@ jobs:
       - run: npm test
       - run: npm run build
       - name: Start the container stack
-        env:
-          DB_PASSWORD: forge-ci-db-password
-          MYSQL_ROOT_PASSWORD: forge-ci-root-password
-          JWT_SECRET: forge-ci-only-secret-0123456789-abcdef
         run: docker compose up --build --detach
       - name: Smoke test the running application
         run: |
