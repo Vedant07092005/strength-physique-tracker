@@ -28,7 +28,7 @@ FORGE is a private training log for strength sessions and physique check-ins. It
 
 Build the client with `npm run build`, then start the API and static client with `npm start`. The same Express process serves `dist` and `/api`.
 
-For a container deployment, copy `.env.example` to `.env`, set strong values for `DB_PASSWORD` and `JWT_SECRET`, and run:
+For a container deployment, copy `.env.example` to `.env`, set strong values for `DB_PASSWORD`, `MYSQL_ROOT_PASSWORD`, and `JWT_SECRET`, and run:
 
 ```sh
 docker compose up --build
