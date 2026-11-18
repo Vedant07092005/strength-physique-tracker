@@ -8,6 +8,7 @@ on:
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -16,3 +17,29 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+      - name: Start the container stack
+        env:
+          DB_PASSWORD: forge-ci-db-password
+          MYSQL_ROOT_PASSWORD: forge-ci-root-password
+          JWT_SECRET: forge-ci-only-secret-0123456789-abcdef
+        run: docker compose up --build --detach
+      - name: Smoke test the running application
+        run: |
+          ready=0
+          for attempt in {1..60}; do
+            if curl --fail --silent http://localhost:3001/api/health >/dev/null; then
+              ready=1
+              break
+            fi
+            sleep 2
+          done
+          if [ "$ready" -ne 1 ]; then
+            docker compose ps
+            docker compose logs
+            exit 1
+          fi
+          node scripts/smoke-test.mjs
+          curl --fail --silent http://localhost:3001/ >/dev/null
+      - name: Stop the container stack
+        if: always()
+        run: docker compose down --volumes
