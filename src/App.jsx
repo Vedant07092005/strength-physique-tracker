@@ -101,6 +101,7 @@ function MetricCard({ label, value, unit, caption, accent = false }) {
 }
 
 function Overview({ data, loading, onNavigate, onOpenWorkout }) {
+  const hasStarted = Boolean(data?.recentWorkouts?.length || data?.latestCheckin);
   return <>
     <div className="page-heading">
       <div><p className="eyebrow">THE LONG GAME</p><h1>Your progress, <em>in motion.</em></h1><p className="muted">Every session compounds. Keep showing up.</p></div>
@@ -112,6 +113,22 @@ function Overview({ data, loading, onNavigate, onOpenWorkout }) {
       <MetricCard label="BODY FAT" value={amount(data?.latestCheckin?.bodyFatPct)} unit={data?.latestCheckin?.bodyFatPct == null ? '' : '%'} caption="A data point, not the whole story" />
       <MetricCard label="BEST LIFT" value={amount(data?.bestLifts?.[0]?.bestWeightKg, 0)} unit={data?.bestLifts?.[0]?.bestWeightKg == null ? '' : 'kg'} caption={data?.bestLifts?.[0]?.name || 'Log a weighted set'} />
     </section>
+    {!loading && !hasStarted && <section className="first-session-panel">
+      <div className="first-session-copy">
+        <p className="eyebrow">YOUR BASELINE STARTS HERE</p>
+        <h2>Make the first mark.</h2>
+        <p>One session gives your progress a starting point. Add a check-in whenever you’re ready.</p>
+        <div className="first-session-actions">
+          <button className="button button-primary" onClick={() => onNavigate('workouts')}>Log your first workout <span>↗</span></button>
+          <button className="text-button" onClick={() => onNavigate('checkins')}>Add a physique check-in <span>→</span></button>
+        </div>
+      </div>
+      <div className="first-session-steps" aria-label="Three steps to get started">
+        <div className="first-session-step"><span>01</span><strong>Train</strong><small>Record your sets</small></div>
+        <div className="first-session-step"><span>02</span><strong>Check in</strong><small>Save a baseline</small></div>
+        <div className="first-session-step"><span>03</span><strong>Track</strong><small>See the trend</small></div>
+      </div>
+    </section>}
     <section className="dashboard-grid">
       <article className="panel recent-panel">
         <div className="panel-heading"><div><p className="eyebrow">THE WORK</p><h2>Recent sessions</h2></div><button className="text-button" onClick={() => onNavigate('workouts')}>View all ↗</button></div>
