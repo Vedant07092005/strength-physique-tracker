@@ -48,3 +48,7 @@ The current automated tests cover request validation. The deployment health chec
 ## Data model
 
 Users own their workouts, check-ins, and custom exercises. A small shared exercise catalog is seeded with `owner_id = NULL`. Workout entries point to exercise IDs; they do not copy exercise names. Renaming a custom exercise therefore updates its displayed name in every workout, and archived exercises stay attached to historical sessions. Each complete workout is written inside one MySQL transaction.
+
+## UI reference
+
+The light lavender and violet visual direction is adapted from [Finance Management Mobile App UI UX Kit for Budget Tracker Financial Prototype Design](https://www.figma.com/community/file/1358180178353418071/finance-management-mobile-app-ui-ux-kit-for-budget-tracker-financial-prototype-design) by Vectorfair, licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). FORGE's screens and interactions are tailored to strength training and physique tracking.
